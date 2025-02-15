@@ -4,24 +4,35 @@ const path = require('path')
 const BLOG = require('./blog.config')
 const { extractLangPrefix } = require('./lib/utils/pageId')
 
-// 打包时是否分析代码
+/**
+ * Bundle analyzer configuration
+ * Analyzes the size and composition of the application bundle
+ */
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: BLOG.BUNDLE_ANALYZER
 })
 
-// 扫描项目 /themes下的目录名
+/**
+ * Scans theme directory to get available themes
+ * Returns an array of theme folder names under the /themes directory
+ */
 const themes = scanSubdirectories(path.resolve(__dirname, 'themes'))
-// 检测用户开启的多语言
+
+/**
+ * Configure multi-language support
+ * Detects and configures available languages based on Notion page IDs
+ * @returns {string[]} Array of language codes supported by the site
+ */
 const locales = (function () {
-  // 根据BLOG_NOTION_PAGE_ID 检查支持多少种语言数据.
-  // 支持如下格式配置多个语言的页面id xxx,zh:xxx,en:xxx
+  // Check how many languages are supported based on BLOG_NOTION_PAGE_ID.
+  // Supports configuring multiple language page IDs in the format xxx,zh:xxx,en:xxx
   const langs = [BLOG.LANG.slice(0, 2)]
   if (BLOG.NOTION_PAGE_ID.indexOf(',') > 0) {
     const siteIds = BLOG.NOTION_PAGE_ID.split(',')
     for (let index = 0; index < siteIds.length; index++) {
       const siteId = siteIds[index]
       const prefix = extractLangPrefix(siteId)
-      // 如果包含前缀 例如 zh , en 等
+      // If it contains a prefix such as zh, en, etc.
       if (prefix) {
         if (!langs.includes(prefix)) {
           langs.push(prefix)
@@ -32,8 +43,11 @@ const locales = (function () {
   return langs
 })()
 
-// 编译前执行
-// eslint-disable-next-line no-unused-vars
+/**
+ * Pre-build cleanup function
+ * Removes existing sitemap files before generation to prevent conflicts
+ * Only runs during export and build operations
+ */
 const preBuild = (function () {
   if (
     !process.env.npm_lifecycle_event === 'export' &&
@@ -41,7 +55,7 @@ const preBuild = (function () {
   ) {
     return
   }
-  // 删除 public/sitemap.xml 文件 ； 否则会和/pages/sitemap.xml.js 冲突。
+  // Delete the public/sitemap.xml file; otherwise, it will conflict with /pages/sitemap.xml.js.
   const sitemapPath = path.resolve(__dirname, 'public', 'sitemap.xml')
   if (fs.existsSync(sitemapPath)) {
     fs.unlinkSync(sitemapPath)
@@ -56,9 +70,10 @@ const preBuild = (function () {
 })()
 
 /**
- * 扫描指定目录下的文件夹名，用于获取所有主题
- * @param {*} directory
- * @returns
+ * Scans a directory for subdirectories
+ * Used to detect available themes in the themes folder
+ * @param {string} directory - Path to directory to scan
+ * @returns {string[]} Array of subdirectory names
  */
 function scanSubdirectories(directory) {
   const subdirectories = []
@@ -77,27 +92,34 @@ function scanSubdirectories(directory) {
 }
 
 /**
- * @type {import('next').NextConfig}
+ * Next.js configuration object
+ * Contains all the configuration settings for the Next.js application including:
+ * - Build settings
+ * - i18n configuration
+ * - Image optimization
+ * - Redirects and rewrites
+ * - Security headers
+ * - Webpack customization
+ * - Export configuration
  */
-
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true
   },
   output: process.env.EXPORT ? 'export' : process.env.NEXT_BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
   staticPageGenerationTimeout: 120,
-  // 多语言， 在export时禁用
+  // Multilingual, disabled during export
   i18n: process.env.EXPORT
     ? undefined
     : {
         defaultLocale: BLOG.LANG.slice(0, 2),
-        // 支持的所有多语言,按需填写即可
+        // All supported languages, fill in as needed
         locales
       },
   images: {
-    // 图片压缩
+    // Image compression
     formats: ['image/avif', 'image/webp'],
-    // 允许next/image加载的图片 域名
+    // Allowed image domains for next/image
     domains: [
       'gravatar.com',
       'www.notion.so',
@@ -110,7 +132,7 @@ const nextConfig = {
     ]
   },
 
-  // 默认将feed重定向至 /public/rss/feed.xml
+  // Default redirect feed to /public/rss/feed.xml
   redirects: process.env.EXPORT
     ? undefined
     : async () => {
@@ -122,11 +144,11 @@ const nextConfig = {
           }
         ]
       },
-  // 重写url
+  // Rewrite URLs
   rewrites: process.env.EXPORT
     ? undefined
     : async () => {
-        // 处理多语言重定向
+        // Handle multilingual redirects
         const langsRewrites = []
         if (BLOG.NOTION_PAGE_ID.indexOf(',') > 0) {
           const siteIds = BLOG.NOTION_PAGE_ID.split(',')
@@ -134,26 +156,26 @@ const nextConfig = {
           for (let index = 0; index < siteIds.length; index++) {
             const siteId = siteIds[index]
             const prefix = extractLangPrefix(siteId)
-            // 如果包含前缀 例如 zh , en 等
+            // If it contains a prefix such as zh, en, etc.
             if (prefix) {
               langs.push(prefix)
             }
             console.log('[Locales]', siteId)
           }
 
-          // 映射多语言
-          // 示例： source: '/:locale(zh|en)/:path*' ; :locale() 会将语言放入重写后的 `?locale=` 中。
+          // Map multilingual
+          // Example: source: '/:locale(zh|en)/:path*'; :locale() will put the language into the rewritten `?locale=`.
           langsRewrites.push(
             {
               source: `/:locale(${langs.join('|')})/:path*`,
               destination: '/:path*'
             },
-            // 匹配没有路径的情况，例如 [domain]/zh 或 [domain]/en
+            // Match cases without a path, such as [domain]/zh or [domain]/en
             {
               source: `/:locale(${langs.join('|')})`,
               destination: '/'
             },
-            // 匹配没有路径的情况，例如 [domain]/zh/ 或 [domain]/en/
+            // Match cases without a path, such as [domain]/zh/ or [domain]/en/
             {
               source: `/:locale(${langs.join('|')})/`,
               destination: '/'
@@ -163,7 +185,7 @@ const nextConfig = {
 
         return [
           ...langsRewrites,
-          // 伪静态重写
+          // Pseudo-static rewrite
           {
             source: '/:path*.html',
             destination: '/:path*'
@@ -193,11 +215,11 @@ const nextConfig = {
         ]
       },
   webpack: (config, { dev, isServer }) => {
-    // 动态主题：添加 resolve.alias 配置，将动态路径映射到实际路径
+    // Dynamic theme: add resolve.alias configuration to map dynamic paths to actual paths
     config.resolve.alias['@'] = path.resolve(__dirname)
 
     if (!isServer) {
-      console.log('[默认主题]', path.resolve(__dirname, 'themes', THEME))
+      console.log('[Default Theme]', path.resolve(__dirname, 'themes', THEME))
     }
     config.resolve.alias['@theme-components'] = path.resolve(
       __dirname,
@@ -217,18 +239,22 @@ const nextConfig = {
     defaultPathMap,
     { dev, dir, outDir, distDir, buildId }
   ) {
-    // export 静态导出时 忽略/pages/sitemap.xml.js ， 否则和getServerSideProps这个动态文件冲突
+    // Ignore /pages/sitemap.xml.js during static export, otherwise it conflicts with the dynamic file getServerSideProps
     const pages = { ...defaultPathMap }
     delete pages['/sitemap.xml']
     delete pages['/auth']
     return pages
   },
   publicRuntimeConfig: {
-    // 这里的配置既可以服务端获取到，也可以在浏览器端获取到
+    // This configuration can be accessed both on the server and in the browser
     THEMES: themes
   }
 }
 
+/**
+ * Exports the Next.js configuration
+ * Adds bundle analyzer if ANALYZE environment variable is set
+ */
 module.exports = process.env.ANALYZE
   ? withBundleAnalyzer(nextConfig)
   : nextConfig

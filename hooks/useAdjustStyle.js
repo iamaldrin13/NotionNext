@@ -2,11 +2,14 @@ import { isBrowser } from '@/lib/utils';
 import { useEffect } from 'react';
 
 /**
- * 样式调整的补丁
+ * Hook to adjust styles dynamically.
+ * Prevents callout images from overflowing their container.
  */
 const useAdjustStyle = () => {
   /**
-   * 避免 callout 含有图片时溢出撑开父容器
+   * Adjusts images within callouts to prevent overflow.
+   * Finds all elements with class "notion-callout-text", and for each image container inside,
+   * if the image width exceeds the callout width minus a margin, sets its width to 100%.
    */
   const adjustCalloutImg = () => {
     const callOuts = document.querySelectorAll('.notion-callout-text');
@@ -22,6 +25,10 @@ const useAdjustStyle = () => {
     });
   };
 
+  /**
+   * React effect hook that invokes adjustCalloutImg on mount and resizes.
+   * Registers the adjustCalloutImg function to run on window resize and cleans up on unmount.
+   */
   useEffect(() => {
     if (isBrowser) {
       adjustCalloutImg();

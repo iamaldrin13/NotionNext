@@ -6,15 +6,20 @@ import { idToUuid } from 'notion-utils'
 import Slug from '..'
 
 /**
- * 根据notion的slug访问页面
- * 解析二级目录 /article/about
- * @param {*} props
- * @returns
+ * Page component for accessing content via Notion slug
+ * Handles second-level directory paths like /article/about
+ * @param {Object} props - Component properties including post data
+ * @returns {JSX.Element} Rendered Slug component with post content
  */
 const PrefixSlug = props => {
   return <Slug {...props} />
 }
 
+/**
+ * Generate static paths for all possible prefix/slug combinations
+ * Used by Next.js for static site generation (SSG)
+ * @returns {Object} Path configuration for Next.js with fallback behavior
+ */
 export async function getStaticPaths() {
   if (!BLOG.isProd) {
     return {
@@ -26,17 +31,17 @@ export async function getStaticPaths() {
   const from = 'slug-paths'
   const { allPages } = await getGlobalData({ from })
 
-  // 根据slug中的 / 分割成prefix和slug两个字段 ; 例如 article/test
-  // 最终用户可以通过  [domain]/[prefix]/[slug] 路径访问，即这里的 [domain]/article/test
+  // Split slug by '/' into prefix and slug fields; e.g., article/test
+  // Users can access via [domain]/[prefix]/[slug] path, i.e., [domain]/article/test
   const paths = allPages
     ?.filter(row => checkSlugHasOneSlash(row))
     .map(row => ({
       params: { prefix: row.slug.split('/')[0], slug: row.slug.split('/')[1] }
     }))
 
-  // 增加一种访问路径 允许通过 [category]/[slug] 访问文章
-  // 例如文章slug 是 test ，然后文章的分类category是 production
-  // 则除了 [domain]/[slug] 以外，还支持分类名访问: [domain]/[category]/[slug]
+  // Add additional access path - allow access via [category]/[slug]
+  // E.g., if article slug is 'test' and category is 'production'
+  // Besides [domain]/[slug], also supports category access: [domain]/[category]/[slug]
 
   return {
     paths: paths,
@@ -44,12 +49,18 @@ export async function getStaticPaths() {
   }
 }
 
+/**
+ * Fetch data for each prefix/slug combination
+ * Gets post data and processes it for display
+ * @param {Object} params - Contains prefix, slug and locale information
+ * @returns {Object} Props for the page component including post data
+ */
 export async function getStaticProps({ params: { prefix, slug }, locale }) {
   const fullSlug = prefix + '/' + slug
   const from = `slug-props-${fullSlug}`
   const props = await getGlobalData({ from, locale })
 
-  // 在列表内查找文章
+  // Find article in the list
   props.post = props?.allPages?.find(p => {
     return (
       p.type.indexOf('Menu') < 0 &&
@@ -57,7 +68,7 @@ export async function getStaticProps({ params: { prefix, slug }, locale }) {
     )
   })
 
-  // 处理非列表内文章的内信息
+  // Handle post information for articles not in the list
   if (!props?.post) {
     const pageId = slug.slice(-1)[0]
     if (pageId.length >= 32) {
@@ -67,11 +78,12 @@ export async function getStaticProps({ params: { prefix, slug }, locale }) {
   }
 
   if (!props?.post) {
-    // 无法获取文章
+    // Cannot retrieve article
     props.post = null
   } else {
     await processPostData(props, from)
   }
+  
   return {
     props,
     revalidate: process.env.EXPORT

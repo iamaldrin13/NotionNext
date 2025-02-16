@@ -1,9 +1,12 @@
 import subscribeToMailchimpApi from '@/lib/plugins/mailchimp'
 
 /**
- * 接受邮件订阅
- * @param {*} req
- * @param {*} res
+ * Handler for processing email subscription requests.
+ * Accepts POST requests containing subscriber details and subscribes the user via Mailchimp.
+ *
+ * @param {object} req - HTTP request object.
+ * @param {object} res - HTTP response object.
+ * @returns {Promise<void>}
  */
 export default async function handler(req, res) {
   if (req.method === 'POST') {

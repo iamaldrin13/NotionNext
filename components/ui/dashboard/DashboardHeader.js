@@ -5,8 +5,9 @@ import Link from 'next/link'
 import DashboardSignOutButton from './DashboardSignOutButton'
 
 /**
- * 仪表盘页头
- * @returns
+ * Dashboard header component
+ * Displays user information and sign-out button
+ * @returns {JSX.Element}
  */
 export default function DashboardHeader() {
   const { user } = useGlobal()
@@ -14,7 +15,7 @@ export default function DashboardHeader() {
   return (
     <>
       <div className='flex w-full container mx-auto mt-12 mb-12 justify-ends'>
-        {/* 头像昵称 */}
+        {/* User avatar and name */}
         <div className='flex items-center gap-4 w-full'>
           <LazyImage
             className='w-10 h-10 rounded-full'
@@ -22,12 +23,12 @@ export default function DashboardHeader() {
             alt={user?.fullName}
           />
 
-          <div class='font-medium dark:text-white'>
+          <div className='font-medium dark:text-white'>
             <div className='flex items-center gap-x-2'>
               <span>{user?.fullName}</span>
               <Link href='/dashboard/membership'>
-                <span class='bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300'>
-                  普通用户
+                <span className='bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300'>
+                  Regular User
                 </span>
               </Link>
             </div>
@@ -38,7 +39,7 @@ export default function DashboardHeader() {
           </div>
         </div>
 
-        {/* 登出按钮 */}
+        {/* Sign-out button */}
         <div className='flex items-center'>
           <DashboardSignOutButton />
         </div>

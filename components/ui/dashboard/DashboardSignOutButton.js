@@ -1,7 +1,9 @@
 import { SignOutButton } from '@clerk/nextjs'
+
 /**
- * 控制台登出按钮
- * @returns
+ * Dashboard Sign Out Button
+ * Provides a button for users to sign out of the dashboard
+ * @returns {JSX.Element | null}
  */
 export default function DashboardSignOutButton() {
   const enableClerk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY

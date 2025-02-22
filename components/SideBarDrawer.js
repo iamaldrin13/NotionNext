@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 /**
- * 侧边栏抽屉面板，可以从侧面拉出
+ * Sidebar drawer panel that can be pulled out from the side
  * @returns {JSX.Element}
  * @constructor
  */
@@ -17,6 +17,7 @@ const SideBarDrawer = ({
   const router = useRouter()
 
   useEffect(() => {
+    // Listener to close the sidebar drawer on route change
     const sideBarDrawerRouteListener = () => {
       switchSideDrawerVisible(false)
     }
@@ -26,7 +27,10 @@ const SideBarDrawer = ({
     }
   }, [router.events])
 
-  // 点击按钮更改侧边抽屉状态
+  /**
+   * Toggle the visibility of the sidebar drawer
+   * @param {boolean} showStatus - Whether to show or hide the drawer
+   */
   const switchSideDrawerVisible = showStatus => {
     if (showStatus) {
       onOpen && onOpen()
@@ -57,7 +61,7 @@ const SideBarDrawer = ({
         {children}
       </div>
 
-      {/* 背景蒙版 */}
+      {/* Background overlay */}
       <div
         id='sidebar-drawer-background'
         onClick={() => switchSideDrawerVisible(false)}

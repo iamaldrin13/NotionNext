@@ -1,32 +1,22 @@
 import Link from 'next/link'
-
-/**
- * 仪表盘菜单
- * @returns
- */
 import { useRouter } from 'next/router'
 
 /**
- * 仪表盘菜单
- * @returns
+ * Dashboard Menu Component
+ * Displays a list of navigation links for the dashboard
+ * @returns {JSX.Element}
  */
 export default function DashboardMenuList() {
-  const { asPath } = useRouter() // 获取当前路径
+  const { asPath } = useRouter() // Get the current path
+
+  // Define the dashboard menu items with titles, icons, and links
   const dashBoardMenus = [
-    { title: '仪表盘', icon: 'fas fa-gauge', href: '/dashboard' },
-    { title: '基础资料', icon: 'fas fa-user', href: '/dashboard/user-profile' },
-    { title: '我的余额', icon: 'fas fa-coins', href: '/dashboard/balance' },
-    { title: '我的会员', icon: 'fas fa-gem', href: '/dashboard/membership' },
-    {
-      title: '我的订单',
-      icon: 'fas fa-cart-shopping',
-      href: '/dashboard/order'
-    },
-    {
-      title: '推广中心',
-      icon: 'fas fa-hand-holding-usd',
-      href: '/dashboard/affiliate'
-    }
+    { title: 'Dashboard', icon: 'fas fa-gauge', href: '/dashboard' },
+    { title: 'Basic Information', icon: 'fas fa-user', href: '/dashboard/user-profile' },
+    { title: 'My Balance', icon: 'fas fa-coins', href: '/dashboard/balance' },
+    { title: 'My Membership', icon: 'fas fa-gem', href: '/dashboard/membership' },
+    { title: 'My Orders', icon: 'fas fa-cart-shopping', href: '/dashboard/order' },
+    { title: 'Affiliate Center', icon: 'fas fa-hand-holding-usd', href: '/dashboard/affiliate' }
   ]
 
   return (
@@ -34,7 +24,7 @@ export default function DashboardMenuList() {
       role='menu'
       className='side-tabs-list bg-white border rounded-lg shadow-lg p-2 space-y-2 mb-6'>
       {dashBoardMenus.map((item, index) => {
-        // 判断当前菜单是否高亮
+        // Determine if the current menu item is active
         const isActive = asPath === item.href
         return (
           <li

@@ -1,62 +1,63 @@
 /**
- * 首页组件
- * @returns
+ * Home Component
+ * Displays the main dashboard home page with various sections
+ * @returns {JSX.Element}
  */
 export default function DashboardItemHome() {
   return (
     <div className='w-full mx-auto'>
-      {/* 提示消息 */}
+      {/* Alert message */}
       <div
         className='p-4 mb-4 text-xl font-bold text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400'
         role='alert'>
-        <span className='font-medium'>注意!</span>{' '}
-        整个后台都只是页面效果，仅供演示查看，没有对接实际功能。
+        <span className='font-medium'>Attention!</span>{' '}
+        The entire backend is just a page effect for demonstration purposes, with no actual functionality.
       </div>
 
-      {/* 页面说明 */}
+      {/* Page description */}
       <div className='mb-8 text-lg text-gray-700 dark:text-gray-300'>
         <p>
-          欢迎来到用户中心页面！在这里，您可以查看用户的账号信息与业务订单概况。
+          Welcome to the user center page! Here, you can view user account information and business order overview.
         </p>
       </div>
 
-      {/* 进度条 */}
+      {/* Progress bar */}
       <div className='mb-8'>
-        <h3 className='text-xl text-gray-800 dark:text-white'>当前任务进度</h3>
+        <h3 className='text-xl text-gray-800 dark:text-white'>Current Task Progress</h3>
         <div className='bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 my-2'>
           <div
             className='bg-green-500 h-2.5 rounded-full'
             style={{ width: '75%' }}></div>
         </div>
         <p className='text-sm text-gray-500 dark:text-gray-400'>
-          任务进度：75%
+          Task Progress: 75%
         </p>
       </div>
 
-      {/* 背景动画块 */}
+      {/* Background animation block */}
       <div className='relative w-full h-64 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 overflow-hidden'>
         <div className='absolute inset-0 w-full h-full animate-pulse bg-black opacity-50'></div>
         <div className='relative z-10 text-center text-white font-bold pt-24'>
-          <h3 className='text-2xl'>实时数据分析</h3>
-          <p className='text-lg'>监控您的系统数据，查看实时变化</p>
+          <h3 className='text-2xl'>Real-time Data Analysis</h3>
+          <p className='text-lg'>Monitor your system data and view real-time changes</p>
         </div>
       </div>
 
-      {/* 数据卡片模块 */}
+      {/* Data card module */}
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8'>
         <div className='bg-white shadow-lg p-6 rounded-lg hover:scale-105 transition-all transform duration-300'>
-          <h3 className='text-xl text-gray-800 dark:text-white'>今日访问量</h3>
+          <h3 className='text-xl text-gray-800 dark:text-white'>Today's Visits</h3>
           <p className='text-3xl text-green-600'>1,245</p>
         </div>
         <div className='bg-white shadow-lg p-6 rounded-lg hover:scale-105 transition-all transform duration-300'>
-          <h3 className='text-xl text-gray-800 dark:text-white'>用户总数</h3>
+          <h3 className='text-xl text-gray-800 dark:text-white'>Total Users</h3>
           <p className='text-3xl text-blue-600'>12,300</p>
         </div>
         <div className='bg-white shadow-lg p-6 rounded-lg hover:scale-105 transition-all transform duration-300'>
           <h3 className='text-xl text-gray-800 dark:text-white'>
-            系统健康状态
+            System Health Status
           </h3>
-          <p className='text-3xl text-red-600'>正常</p>
+          <p className='text-3xl text-red-600'>Normal</p>
         </div>
       </div>
     </div>

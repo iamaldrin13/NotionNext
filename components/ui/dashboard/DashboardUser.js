@@ -1,7 +1,9 @@
 import { UserProfile } from '@clerk/nextjs'
+
 /**
- * 控制台用户账号面板
- * @returns
+ * Dashboard User Account Panel
+ * Displays the user's profile information
+ * @returns {JSX.Element | null}
  */
 export default function DashboardUser() {
   const enableClerk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY

@@ -1,29 +1,31 @@
 import Link from 'next/link'
 
 /**
- * 联盟行销
- * @returns
+ * Affiliate Marketing Dashboard Item
+ * Displays affiliate marketing statistics and withdrawal form
+ * @returns {JSX.Element}
  */
 export default function DashboardItemAffliate() {
+  // Define card data for affiliate statistics
   const cards = [
     {
       title: '￥0.00',
-      desc: '累计佣金',
+      desc: 'Total Commission',
       className: 'bg-blue-600 hover:bg-blue-700 text-white'
     },
     {
       title: '￥0.00',
-      desc: '已提现',
+      desc: 'Withdrawn',
       className: 'bg-cyan-600 hover:bg-cyan-700 text-white'
     },
     {
       title: '￥0.00',
-      desc: '提现中',
+      desc: 'Pending Withdrawal',
       className: 'bg-pink-600 hover:bg-pink-700 text-white'
     },
     {
       title: '￥0.00',
-      desc: '可提现',
+      desc: 'Available for Withdrawal',
       className: 'bg-emerald-600 hover:bg-emerald-700 text-white'
     }
   ]
@@ -46,9 +48,9 @@ export default function DashboardItemAffliate() {
         <div className='grid gap-6 mb-6 md:grid-cols-2'>
           <div>
             <label
-              for='last_name'
+              htmlFor='last_name'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
-              推广总数
+              Total Promotions
             </label>
             <input
               disabled
@@ -61,9 +63,9 @@ export default function DashboardItemAffliate() {
           </div>
           <div>
             <label
-              for='company'
+              htmlFor='company'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
-              推广链接
+              Promotion Link
             </label>
             <input
               disabled
@@ -77,9 +79,9 @@ export default function DashboardItemAffliate() {
 
           <div>
             <label
-              for='website'
+              htmlFor='website'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
-              推广佣金提成
+              Promotion Commission Rate
             </label>
             <input
               disabled
@@ -97,9 +99,9 @@ export default function DashboardItemAffliate() {
         <div className='grid gap-6 mb-6 md:grid-cols-2'>
           <div>
             <label
-              for='first_name'
+              htmlFor='first_name'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
-              提现账号
+              Withdrawal Account
             </label>
             <input
               type='text'
@@ -112,9 +114,9 @@ export default function DashboardItemAffliate() {
 
           <div>
             <label
-              for='visitors'
+              htmlFor='visitors'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
-              提现金额
+              Withdrawal Amount
             </label>
             <input
               type='number'
@@ -137,13 +139,13 @@ export default function DashboardItemAffliate() {
             />
           </div>
           <label
-            for='remember'
+            htmlFor='remember'
             className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-            我以阅读并同意{' '}
+            I have read and agree to the{' '}
             <Link
               href='/terms-of-use'
               className='text-blue-600 hover:underline dark:text-blue-500'>
-              服务协议
+              Terms of Service
             </Link>
             .
           </label>
@@ -152,33 +154,33 @@ export default function DashboardItemAffliate() {
           <button
             type='submit'
             className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
-            提现RMB
+            Withdraw RMB
           </button>
           <button
             type='submit'
             className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
-            提现到余额
+            Withdraw to Balance
           </button>
         </div>
 
         <ul className='text-gray-600 list-disc pl-6'>
-          <li>推广说明：</li>
-          <li className='font-bold'>这只是一个演示页面，不存在真实功能！</li>
+          <li>Promotion Instructions:</li>
+          <li className='font-bold'>This is a demo page with no real functionality!</li>
           <li>
-            如需提现请联系网站管理员，发送您的账号信息和收款码进行人工提现
+            To withdraw, please contact the site administrator and send your account information and payment code for manual withdrawal.
           </li>
           <li>
-            如果用户是通过您的推广链接购买的资源或者开通会员，则按照推广佣金比列奖励到您的佣金中
+            If a user purchases resources or subscribes through your promotion link, the commission will be credited to your account according to the commission rate.
           </li>
           <li>
-            如果用户是通过您的链接新注册的用户，推荐人是您，该用户购买资都会给你佣金
+            If a user registers through your link and you are the referrer, you will receive a commission for their purchases.
           </li>
           <li>
-            如果用户是你的下级，用户使用其他推荐人链接购买，以上下级关系为准，优先给注册推荐人而不是推荐链接
+            If the user is your subordinate and uses another referrer's link to purchase, the subordinate relationship takes precedence, and the commission goes to the registration referrer.
           </li>
-          <li>推广奖励金额保留一位小数点四舍五入。0.1之类的奖励金额不计算</li>
+          <li>Promotion rewards are rounded to one decimal place. Rewards like 0.1 are not calculated.</li>
           <li>
-            前台无法查看推广订单详情，如需查看详情可联系管理员截图查看详细记录和时间
+            Promotion order details cannot be viewed on the frontend. Contact the administrator for detailed records and times.
           </li>
         </ul>
       </form>

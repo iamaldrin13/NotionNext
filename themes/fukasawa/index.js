@@ -105,8 +105,15 @@ const LayoutBase = props => {
  * @param {*} props notion数据
  * @returns 首页就是一个博客列表
  */
+import Hero from './components/Hero'
+
 const LayoutIndex = props => {
-  return <LayoutPostList {...props} />
+  return (
+    <>
+      <Hero posts={props.posts} />
+      <LayoutPostList {...props} />
+    </>
+  )
 }
 
 /**
@@ -115,15 +122,19 @@ const LayoutIndex = props => {
  */
 const LayoutPostList = props => {
   const POST_LIST_STYLE = siteConfig('POST_LIST_STYLE')
+  // Filter out the first 3 posts that are shown in Hero section
+  const filteredPosts = props.posts?.slice(1)
+  const propsWithFilteredPosts = { ...props, posts: filteredPosts }
+
   return (
     <>
       <div className='w-full p-2'>
         <WWAds className='w-full' orientation='horizontal' />
       </div>
       { POST_LIST_STYLE=== 'page' ? (
-        <BlogListPage {...props} />
+        <BlogListPage {...propsWithFilteredPosts} />
       ) : (
-        <BlogListScroll {...props} />
+        <BlogListScroll {...propsWithFilteredPosts} />
       )}
     </>
   )
